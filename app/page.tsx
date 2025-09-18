@@ -1,103 +1,79 @@
-import Image from "next/image";
+"use client";
+import { motion } from "framer-motion";
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="w-full min-h-screen font-sans">
+      {/* Section 1: Hero */}
+      <section
+        className="h-screen w-full bg-cover bg-center flex items-center justify-end pr-50 mt-10"
+        style={{ backgroundImage: "url('/rose.png')" }}
+      >
+        <motion.h1
+          initial={{ opacity: 0, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="text-black text-8xl font-bold drop-shadow-lg"
+        >
+          कलाकार
+        </motion.h1>
+      </section>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Section 2: Misaligned Cards */}
+      <section className="py-20 px-6 md:px-20 bg-white">
+        <h2 className="text-3xl font-bold text-center mb-16">Explore India!</h2>
+        <div className="grid md:grid-cols-3 gap-12 relative">
+          {/* Furniture */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="bg-gray-100 rounded-2xl shadow-lg p-6 transform -translate-y-6">
+            <h3 className="text-xl font-semibold mb-2">Furniture</h3>
+            <p className="text-gray-600 mb-4">Handcrafted furniture blending tradition with modern design.</p>
+            <img src="/Furniture.png" alt="Furniture" className="rounded-lg w-full h-60 object-cover" />
+          </motion.div>
+
+          {/* Textile */}
+          <motion.div
+            initial={{ opacity: 0, y: 80 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.8 }}
+            viewport={{ once: true }}
+            className="bg-gray-100 rounded-2xl shadow-lg p-6 transform -translate-y-2">
+            <h3 className="text-xl font-semibold mb-2">Textile</h3>
+            <p className="text-gray-600 mb-4">Rich textiles woven by skilled artisans with heritage patterns.</p>
+            <img src="/Textile.png" alt="Textile" className="rounded-lg w-full h-60 object-cover" />
+          </motion.div>
+
+          {/* Pottery */}
+          <motion.div
+            initial={{ opacity: 0, y: 100 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="bg-gray-100 rounded-2xl shadow-lg p-6 transform -translate-y-6">
+            <h3 className="text-xl font-semibold mb-2">Pottery</h3>
+            <p className="text-gray-600 mb-4">Beautiful pottery crafted with earthy tones and natural designs.</p>
+            <img src="/Pottery.png" alt="Pottery" className="rounded-lg w-full h-60 object-cover" />
+          </motion.div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Section 3: Supporting Artisans */}
+      <section
+        className="h-screen w-full bg-cover bg-center flex items-center"
+        style={{ backgroundImage: "url('/Collage4.png')" }}
+      >
+        <div className="text-white p-10 md:p-20 rounded-r-2xl max-w-lg">
+          <h2 className="text-4xl font-bold mb-4">Supporting Artisans</h2>
+          <p className="text-lg">
+            We believe in empowering local artisans by bringing their creations
+            to a global audience. Every product tells a story of heritage and skill.
+          </p>
+        </div>
+      </section>
     </div>
   );
 }

@@ -1,13 +1,68 @@
+// CHANGE 1: Make this component interactive
+'use client'; 
+
 import Link from "next/link";
+// CHANGE 2: Import useState to manage component state
+import { useState } from 'react'; 
 
 export default function SignupPage() {
+  // CHANGE 3: Add state variables for feedback
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // CHANGE 4: Create the function to handle form submission
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsLoading(true);
+    setError('');
+    setSuccess('');
+
+    const formData = new FormData(event.currentTarget);
+    const password = formData.get('password');
+    const confirmPassword = formData.get('confirmPassword');
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      setIsLoading(false);
+      return;
+    }
+
+    // The API doesn't need confirmPassword, so we can remove it
+    formData.delete('confirmPassword');
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        setError(result.message || 'An error occurred.');
+      } else {
+        setSuccess(result.message);
+        (event.target as HTMLFormElement).reset(); // Clear the form on success
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       <section
         className="h-screen w-full bg-cover bg-center flex items-center justify-center "
         style={{ backgroundImage: "url('/Castle.png')" }}
       >
+        {/* CHANGE 5: Attach the handleSubmit function to the form */}
         <form
+          onSubmit={handleSubmit}
           className="bg-[var(--color-bg)]/90 backdrop-blur-lg shadow-2xl p-8 rounded-xl w-96 border border-gray-300/30 relative overflow-hidden mt-20"
         >
           {/* Artisanal decorative elements */}
@@ -24,8 +79,6 @@ export default function SignupPage() {
               name="name"
               type="text"
               placeholder="Full Name"
-
-
               className="w-full p-3 border rounded-lg border-gray-400 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 bg-white/90 transition-all duration-300 pl-10"
               required
             />
@@ -39,8 +92,6 @@ export default function SignupPage() {
               name="email"
               type="email"
               placeholder="Email Address"
-
-
               className="w-full p-3 border rounded-lg border-gray-400 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 bg-white/90 transition-all duration-300 pl-10"
               required
             />
@@ -54,8 +105,6 @@ export default function SignupPage() {
               name="password"
               type="password"
               placeholder="Password"
-
-
               className="w-full p-3 border rounded-lg border-gray-400 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 bg-white/90 transition-all duration-300 pl-10"
               required
             />
@@ -64,13 +113,11 @@ export default function SignupPage() {
             </svg>
           </div>
 
-          <div className="mb-6 relative">
+          <div className="mb-4 relative">
             <input
               name="confirmPassword"
               type="password"
               placeholder="Confirm Password"
-
-
               className="w-full p-3 border rounded-lg border-gray-400 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 bg-white/90 transition-all duration-300 pl-10"
               required
             />
@@ -78,16 +125,53 @@ export default function SignupPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
             </svg>
           </div>
+          
+          {/* CHANGE 6: Add new inputs for craftType and region */}
+          <div className="mb-4 relative">
+            <input
+              name="craftType"
+              type="text"
+              placeholder="Craft Type (e.g., Pottery)"
+              className="w-full p-3 border rounded-lg border-gray-400 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 bg-white/90 transition-all duration-300 pl-10"
+              required
+            />
+             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 absolute left-3 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+            </svg>
+          </div>
+          
+          <div className="mb-6 relative">
+            <input
+              name="region"
+              type="text"
+              placeholder="Region (e.g., Rajasthan)"
+              className="w-full p-3 border rounded-lg border-gray-400 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 bg-white/90 transition-all duration-300 pl-10"
+              required
+            />
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 absolute left-3 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657l-4.243-4.243a1 1 0 010-1.414l4.243-4.243a1 1 0 011.414 1.414L16.414 12l2.657 2.657a1 1 0 01-1.414 1.414z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6.343 16.657l-4.243-4.243a1 1 0 010-1.414l4.243-4.243a1 1 0 011.414 1.414L5.414 12l2.657 2.657a1 1 0 01-1.414 1.414z" />
+            </svg>
+          </div>
+
 
           <button
             type="submit"
-            className="w-full py-3 bg-black text-white rounded-lg border-black font-medium hover:bg-amber-700 transition-colors duration-300 flex items-center justify-center"
+            disabled={isLoading} // CHANGE 7: Disable button while loading
+            className="w-full py-3 bg-black text-white rounded-lg border-black font-medium hover:bg-amber-700 transition-colors duration-300 flex items-center justify-center disabled:bg-gray-400"
           >
-            <span>Sign Up</span>
+            {/* CHANGE 8: Show loading text */}
+            <span>{isLoading ? 'Creating Account...' : 'Sign Up'}</span>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
             </svg>
           </button>
+
+          {/* CHANGE 9: Display error or success messages */}
+          <div className="mt-4 text-center">
+            {error && <p className="text-red-500">{error}</p>}
+            {success && <p className="text-green-600">{success}</p>}
+          </div>
 
           <p className="text-center mt-4 text-black">
             Already have an account?{" "}

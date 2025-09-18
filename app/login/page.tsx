@@ -1,13 +1,53 @@
+'use client';
+
 import Link from "next/link";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Import the router for redirection
 
 export default function LoginPage() {
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter(); // Initialize the router
+
+  // This function will run when the form is submitted
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsLoading(true);
+    setError('');
+
+    const formData = new FormData(event.currentTarget);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        setError(result.message || 'An error occurred.');
+      } else {
+        // On successful login, redirect the user to a dashboard or home page
+        router.push('/dashboard'); // Or any other page you want to redirect to
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       <section
         className="h-screen w-full bg-cover bg-center flex items-center justify-center"
         style={{ backgroundImage: "url('/Castle.png')" }}
       >
-        <form className="bg-[var(--color-bg)]/90 backdrop-blur-lg shadow-2xl p-8 rounded-xl w-96 border border-gray-300/30 relative overflow-hidden">
+        {/* Attach the submit handler to the form */}
+        <form onSubmit={handleSubmit} className="bg-[var(--color-bg)]/90 backdrop-blur-lg shadow-2xl p-8 rounded-xl w-96 border border-gray-300/30 relative overflow-hidden">
           {/* Artisanal decorative elements */}
           <div className="absolute -top-4 -left-4 w-8 h-8 border-l-2 border-t-2 border-amber-600/70"></div>
           <div className="absolute -bottom-4 -right-4 w-8 h-8 border-r-2 border-b-2 border-amber-600/70"></div>
@@ -18,9 +58,12 @@ export default function LoginPage() {
           </div>
           
           <div className="mb-4 relative">
+            {/* Add name attribute */}
             <input
+              name="email"
               type="email"
               placeholder="Email"
+              required
               className="w-full p-3 border rounded-lg border-gray-400 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 bg-white/90 transition-all duration-300 pl-10"
             />
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 absolute left-3 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -29,9 +72,12 @@ export default function LoginPage() {
           </div>
           
           <div className="mb-6 relative">
+             {/* Add name attribute */}
             <input
+              name="password"
               type="password"
               placeholder="Password"
+              required
               className="w-full p-3 border rounded-lg border-gray-400 focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 bg-white/90 transition-all duration-300 pl-10"
             />
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500 absolute left-3 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -41,13 +87,17 @@ export default function LoginPage() {
           
           <button
             type="submit"
-            className="w-full py-3 bg-black text-white rounded-lg border-black font-medium hover:bg-amber-700 transition-colors duration-300 flex items-center justify-center"
+            disabled={isLoading}
+            className="w-full py-3 bg-black text-white rounded-lg border-black font-medium hover:bg-amber-700 transition-colors duration-300 flex items-center justify-center disabled:bg-gray-400"
           >
-            <span>Log In</span>
+            <span>{isLoading ? 'Logging In...' : 'Log In'}</span>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
             </svg>
           </button>
+
+          {/* Display error messages */}
+          {error && <p className="mt-4 text-center text-red-500">{error}</p>}
           
           <p className="text-center mt-4 text-black">
             Haven't signed up yet?{" "}

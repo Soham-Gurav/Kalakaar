@@ -1,6 +1,6 @@
-import { MongoClient } from 'mongodb';
 import bcrypt from 'bcryptjs';
 import { NextResponse } from 'next/server';
+import { connectToDatabase } from '../../../lib/mongodb';
 
 // This is the main function that handles incoming POST requests
 export async function POST(request: Request) {
@@ -17,20 +17,13 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. Connect to your MongoDB Atlas database
-    const MONGO_URI = process.env.MONGO_URI;
-    if (!MONGO_URI) {
-      throw new Error('MONGO_URI is not defined in .env.local');
-    }
-    const client = new MongoClient(MONGO_URI);
-    await client.connect();
-    const db = client.db("KalakaarDB"); // Explicitly use the 'KalakaarDB' database
+    // 3. Connect to your MongoDB Atlas database using the shared helper
+    const { db } = await connectToDatabase();
     const usersCollection = db.collection('users');
 
     // 4. Check if a user with this email already exists
     const existingUser = await usersCollection.findOne({ email: email });
     if (existingUser) {
-      await client.close(); // Close the connection before returning
       return NextResponse.json(
         { message: 'User with this email already exists.' },
         { status: 409 } // Conflict
@@ -50,12 +43,9 @@ export async function POST(request: Request) {
       createdAt: new Date(),
     });
 
-    // 7. Close the database connection
-    await client.close();
-    
-    // 8. Send a success response back to the frontend
+    // 8. Send a success response back to the frontend (serialize ObjectId)
     return NextResponse.json(
-      { message: 'User created successfully!', userId: result.insertedId },
+      { message: 'User created successfully!', userId: result.insertedId.toString() },
       { status: 201 } // Created
     );
 

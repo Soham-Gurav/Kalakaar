@@ -18,8 +18,7 @@ export default function Navbar() {
       <div className="flex gap-6 items-center text-black font-sans">
         <Link className="font-serif" href="/searchpage">Search</Link>
         <Link className="font-serif" href="/ta">Top Artisans</Link>
-        <Link className="font-serif" href="/iapage">Artisans</Link>
-        <Link className="font-serif" href="/cartpage">Cart</Link>
+  <Link className="font-serif" href="/iapage">Artisans</Link>
         <Link className="font-serif" href="/login">Login</Link>
       </div>
     </nav>

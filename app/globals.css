@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
+
 
 @custom-variant dark (&:is(.dark *));
 @layer base {
@@ -129,4 +131,54 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@font-face {
+    font-family: "Monument Extended Bold";
+    src: url("https://db.onlinewebfonts.com/t/55d433372d270829c51e2577a78ef12d.eot");
+    src: url("https://db.onlinewebfonts.com/t/55d433372d270829c51e2577a78ef12d.eot?#iefix")format("embedded-opentype"),
+    url("https://db.onlinewebfonts.com/t/55d433372d270829c51e2577a78ef12d.woff2")format("woff2"),
+    url("https://db.onlinewebfonts.com/t/55d433372d270829c51e2577a78ef12d.woff")format("woff"),
+    url("https://db.onlinewebfonts.com/t/55d433372d270829c51e2577a78ef12d.ttf")format("truetype"),
+    url("https://db.onlinewebfonts.com/t/55d433372d270829c51e2577a78ef12d.svg#Monument Extended Bold")format("svg");
+}
+
+/* For the entire page */
+body::-webkit-scrollbar {
+    display: none; /* Hides the scrollbar */
+}
+
+/* For a specific div with a class like 'my-scrollable-content' */
+.my-scrollable-content::-webkit-scrollbar {
+    display: none;
+}
+h1{
+  font-family: "Monument Extended Bold";
+}
+
+.font-sora {
+  font-family: var(--font-sora), sans-serif;
+  font-size: 100px;
+}
+
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom selection color */
+::selection {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+:root {
+  --font-pixel: "Press Start 2P", monospace;
+}
+.font-pixel {
+  font-family: var(--font-pixel);
 }

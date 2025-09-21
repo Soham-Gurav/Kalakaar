@@ -18,6 +18,8 @@
         "name": "next"
       }
     ],
+    // --- THIS IS THE FIX ---
+    "baseUrl": ".", // Add this line
     "paths": {
       "@/*": ["./*"]
     }
